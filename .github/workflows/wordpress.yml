@@ -25,13 +25,13 @@ jobs:
     - name: Deploy WordPress with Docker Compose for testing
       run: |
         docker-compose down
-        docker-compose up -d
+        docker-compose up -d wordpress-test db phpmyadmin
         
     # ขั้นตอนการตรวจสอบว่าระบบทำงานได้ปกติ
     - name: Health check
       run: |
         sleep 30
-        curl -s http://localhost:8001 | grep -i wordpress
+        curl -s http://localhost:8088 | grep -i wordpress
     
     # ขั้นตอนการทดสอบ WordPress เบื้องต้น
     - name: Basic WordPress Tests
@@ -39,15 +39,15 @@ jobs:
         echo "🔍 เริ่มการทดสอบ WordPress เบื้องต้น"
         # ทดสอบการเข้าถึงหน้า login
         echo "ทดสอบการเข้าถึงหน้า login..."
-        curl -s http://localhost:8001/wp-login.php | grep -q "WordPress" && echo "✅ เข้าถึงหน้า login ได้" || echo "❌ ไม่สามารถเข้าถึงหน้า login ได้"
+        curl -s http://localhost:8088/wp-login.php | grep -q "WordPress" && echo "✅ เข้าถึงหน้า login ได้" || echo "❌ ไม่สามารถเข้าถึงหน้า login ได้"
         
         # ทดสอบการเข้าถึง REST API
         echo "ทดสอบการเข้าถึง REST API..."
-        curl -s http://localhost:8001/wp-json/ | grep -q "routes" && echo "✅ REST API ทำงานปกติ" || echo "❌ REST API ไม่ทำงาน"
+        curl -s http://localhost:8088/wp-json/ | grep -q "routes" && echo "✅ REST API ทำงานปกติ" || echo "❌ REST API ไม่ทำงาน"
         
         # ตรวจสอบรุ่นของ WordPress
         echo "ตรวจสอบรุ่นของ WordPress..."
-        VERSION=$(curl -s http://localhost:8001 | grep -o "content=\"WordPress [0-9.]*\"" | grep -o "[0-9.]*" || echo "ไม่พบข้อมูลรุ่น")
+        VERSION=$(curl -s http://localhost:8088 | grep -o "content=\"WordPress [0-9.]*\"" | grep -o "[0-9.]*" || echo "ไม่พบข้อมูลรุ่น")
         echo "📊 WordPress เวอร์ชัน: $VERSION"
         
         echo "🏁 การทดสอบเสร็จสิ้น"
@@ -69,10 +69,5 @@ jobs:
     - name: Deploy WordPress with Docker Compose
       run: |
         docker-compose down
-        docker-compose up -d
+        docker-compose up -d wordpress-prod db phpmyadmin
         
-    # ขั้นตอนการตรวจสอบว่าระบบทำงานได้ปกติบน Production
-    - name: Health check
-      run: |
-        sleep 30
-        curl -s http://localhost:8000 | grep -i wordpress

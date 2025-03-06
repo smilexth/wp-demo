@@ -26,3 +26,7 @@ data/
 *.swp
 *.swo
 *~
+
+wordpress_production/
+wordpress_test/
+db_data/
