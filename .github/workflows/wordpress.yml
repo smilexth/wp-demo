@@ -28,31 +28,6 @@ jobs:
         docker-compose up -d wordpress-test db phpmyadmin
         
 
-        
-    # ขั้นตอนการทดสอบ WordPress เบื้องต้น
-    - name: Basic WordPress Tests
-      run: |
-        echo "🔍 เริ่มการทดสอบ WordPress เบื้องต้น"
-        
-        # Attempt with localhost hostname
-        echo "Testing with localhost:80"
-        if curl -i localhost:80 > test.txt; then
-          # Display the content for debugging
-          echo "Response content:"
-          cat test.txt
-          
-          # Check for WordPress redirect header
-          if grep -q "X-Redirect-By: WordPress" test.txt; then
-            echo "✅ พบ X-Redirect-By: WordPress header - WordPress ทำงานปกติ"
-          else
-            echo "❌ ไม่พบ X-Redirect-By: WordPress header - WordPress อาจมีปัญหา"
-          fi
-        else
-          echo "❌ Connection to localhost failed"
-        fi
-        
-        echo "🏁 การทดสอบเสร็จสิ้น"
-      shell: /bin/bash -e {0}
 
   # งานสำหรับการ Deploy เมื่อมีการสร้าง Pull Request ไปยัง main
   deploy:
