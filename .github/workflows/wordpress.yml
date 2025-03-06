@@ -35,7 +35,7 @@ jobs:
         
         # Use curl -i and save output to test.txt
         echo "ทดสอบการเข้าถึงหน้า login..."
-        curl -i http://wp-test:80/wp-login.php > test.txt
+        curl -i http://wp-test:80 > test.txt
         
         # Display the content for debugging
         echo "Response content:"
