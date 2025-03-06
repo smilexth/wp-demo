@@ -32,11 +32,7 @@ jobs:
     - name: Basic WordPress Tests
       run: |
         echo "🔍 เริ่มการทดสอบ WordPress เบื้องต้น"
-        
-        # ทดสอบการเข้าถึงหน้า login
-        echo "ทดสอบการเข้าถึงหน้า login..."
-        curl -s http://wp-test:80/wp-login.php | grep -q -E "(WordPress|302 Found)" && echo "✅ เข้าถึงหน้า login ได้" || echo "❌ ไม่สามารถเข้าถึงหน้า login ได้"
-        
+        curl -s http://wp-test:80/wp-login.php | grep -q -E "(WordPress|302 Found)" 
         echo "🏁 การทดสอบเสร็จสิ้น"
 
   # งานสำหรับการ Deploy เมื่อมีการสร้าง Pull Request ไปยัง main
