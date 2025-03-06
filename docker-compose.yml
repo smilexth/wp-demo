@@ -2,7 +2,7 @@ services:
   wordpress-test:
     container_name: wp-test
     image: wordpress:latest
-    platform: linux/arm64/v8
+    #platform: linux/arm64/v8
     restart: always
     depends_on:
       - db
@@ -21,7 +21,7 @@ services:
   wordpress-prod:
     container_name: wp-prod
     image: wordpress:latest
-    platform: linux/arm64/v8
+    #platform: linux/arm64/v8
     restart: always
     depends_on:
       - db
@@ -40,7 +40,7 @@ services:
   db:
     container_name: wp-db
     image: mariadb:10.6
-    platform: linux/arm64/v8
+    #platform: linux/arm64/v8
     restart: always
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
