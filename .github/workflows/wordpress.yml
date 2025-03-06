@@ -34,10 +34,8 @@ jobs:
       run: |
         echo "🔍 เริ่มการทดสอบ WordPress เบื้องต้น"
         
-   
-        
-        # Attempt with localhost hostname after adding to hosts
-        echo "Testing with localhost:80:"
+        # Attempt with localhost hostname
+        echo "Testing with localhost:80"
         if curl -i localhost:80 > test.txt; then
           # Display the content for debugging
           echo "Response content:"
@@ -54,6 +52,7 @@ jobs:
         fi
         
         echo "🏁 การทดสอบเสร็จสิ้น"
+      shell: /bin/bash -e {0}
 
   # งานสำหรับการ Deploy เมื่อมีการสร้าง Pull Request ไปยัง main
   deploy:
