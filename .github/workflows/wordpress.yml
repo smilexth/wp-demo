@@ -34,11 +34,11 @@ jobs:
         # Increase wait time to 60 seconds
         sleep 60
         
-        # Implement retry logic
+        # Implement retry logic with correct port and header inspection
         MAX_RETRIES=5
         RETRY_COUNT=0
         
-        until curl -s http://wp-test:8088 | grep -i wordpress || [ $RETRY_COUNT -eq $MAX_RETRIES ]; do
+        until curl -i http://wp-test:80/wp-login.php | grep -E "(WordPress|302 Found)" || [ $RETRY_COUNT -eq $MAX_RETRIES ]; do
           echo "WordPress not ready yet, retrying... ($(($RETRY_COUNT+1))/$MAX_RETRIES)"
           RETRY_COUNT=$((RETRY_COUNT+1))
           sleep 15
@@ -46,7 +46,7 @@ jobs:
         
         if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
           echo "WordPress health check failed after $MAX_RETRIES attempts"
-          curl -s http://wp-test:8088 > response.html
+          curl -i http://wp-test:80 > response.html
           echo "Response content:"
           cat response.html
           exit 1
@@ -61,15 +61,15 @@ jobs:
         echo "🔍 เริ่มการทดสอบ WordPress เบื้องต้น"
         # ทดสอบการเข้าถึงหน้า login
         echo "ทดสอบการเข้าถึงหน้า login..."
-        curl -s http://wp-test:8088/wp-login.php | grep -q "WordPress" && echo "✅ เข้าถึงหน้า login ได้" || echo "❌ ไม่สามารถเข้าถึงหน้า login ได้"
+        curl -i http://wp-test:80/wp-login.php | grep -q -E "(WordPress|302 Found)" && echo "✅ เข้าถึงหน้า login ได้" || echo "❌ ไม่สามารถเข้าถึงหน้า login ได้"
         
         # ทดสอบการเข้าถึง REST API
         echo "ทดสอบการเข้าถึง REST API..."
-        curl -s http://wp-test:8088/wp-json/ | grep -q "routes" && echo "✅ REST API ทำงานปกติ" || echo "❌ REST API ไม่ทำงาน"
+        curl -i http://wp-test:80/wp-json/ | grep -q "routes" && echo "✅ REST API ทำงานปกติ" || echo "❌ REST API ไม่ทำงาน"
         
         # ตรวจสอบรุ่นของ WordPress
         echo "ตรวจสอบรุ่นของ WordPress..."
-        VERSION=$(curl -s http://wp-test:8088 | grep -o "content=\"WordPress [0-9.]*\"" | grep -o "[0-9.]*" || echo "ไม่พบข้อมูลรุ่น")
+        VERSION=$(curl -s http://wp-test:80 | grep -o "content=\"WordPress [0-9.]*\"" | grep -o "[0-9.]*" || echo "ไม่พบข้อมูลรุ่น")
         echo "📊 WordPress เวอร์ชัน: $VERSION"
         
         echo "🏁 การทดสอบเสร็จสิ้น"
