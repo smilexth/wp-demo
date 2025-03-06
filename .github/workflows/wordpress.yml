@@ -32,7 +32,22 @@ jobs:
     - name: Basic WordPress Tests
       run: |
         echo "🔍 เริ่มการทดสอบ WordPress เบื้องต้น"
-        curl -s http://wp-test:80/wp-login.php | grep -q -E "(WordPress|302 Found)" && echo "✅ เข้าถึงหน้า login ได้" || echo "❌ ไม่สามารถเข้าถึงหน้า login ได้" 
+        
+        # Use curl -i and save output to test.txt
+        echo "ทดสอบการเข้าถึงหน้า login..."
+        curl -i http://wp-test:80/wp-login.php > test.txt
+        
+        # Display the content for debugging
+        echo "Response content:"
+        cat test.txt
+        
+        # Check for WordPress redirect header
+        if grep -q "X-Redirect-By: WordPress" test.txt; then
+          echo "✅ พบ X-Redirect-By: WordPress header - WordPress ทำงานปกติ"
+        else
+          echo "❌ ไม่พบ X-Redirect-By: WordPress header - WordPress อาจมีปัญหา"
+        fi
+        
         echo "🏁 การทดสอบเสร็จสิ้น"
 
   # งานสำหรับการ Deploy เมื่อมีการสร้าง Pull Request ไปยัง main
