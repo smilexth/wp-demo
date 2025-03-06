@@ -35,7 +35,7 @@ jobs:
         
         # ทดสอบการเข้าถึงหน้า login
         echo "ทดสอบการเข้าถึงหน้า login..."
-        curl -i http://wp-test:80/wp-login.php | grep -q -E "(WordPress|302 Found)" && echo "✅ เข้าถึงหน้า login ได้" || echo "❌ ไม่สามารถเข้าถึงหน้า login ได้"
+        curl -s http://wp-test:80/wp-login.php | grep -q -E "(WordPress|302 Found)" && echo "✅ เข้าถึงหน้า login ได้" || echo "❌ ไม่สามารถเข้าถึงหน้า login ได้"
         
         echo "🏁 การทดสอบเสร็จสิ้น"
 
