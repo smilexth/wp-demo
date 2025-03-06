@@ -27,39 +27,14 @@ jobs:
         docker-compose down
         docker-compose up -d wordpress-test db phpmyadmin
         
-    # Add a step to check container status and get network info
-    - name: Check container status
-      run: |
-        echo "Checking running containers:"
-        docker ps
-        echo "Network information:"
-        docker network ls
-        echo "Adding wp-test to hosts file for DNS resolution:"
-        CONTAINER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -q -f name=wordpress-test))
-        echo "$CONTAINER_IP wp-test" | sudo tee -a /etc/hosts
-        echo "Container IP: $CONTAINER_IP"
+
         
     # ขั้นตอนการทดสอบ WordPress เบื้องต้น
     - name: Basic WordPress Tests
       run: |
         echo "🔍 เริ่มการทดสอบ WordPress เบื้องต้น"
         
-        echo "Testing with localhost:80 first:"
-        if curl -i localhost:80 > test_localhost.txt; then
-          cat test_localhost.txt
-          echo "✅ Localhost connection successful"
-        else
-          echo "❌ Localhost connection failed"
-        fi
-        
-        echo "Testing with container IP:"
-        CONTAINER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -q -f name=wordpress-test))
-        if curl -i $CONTAINER_IP:80 > test_ip.txt; then
-          cat test_ip.txt
-          echo "✅ Container IP connection successful"
-        else
-          echo "❌ Container IP connection failed"
-        fi
+   
         
         # Attempt with wp-test hostname after adding to hosts
         echo "Testing with wp-test:80:"
