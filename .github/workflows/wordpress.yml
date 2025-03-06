@@ -32,6 +32,7 @@ jobs:
       run: |
         sleep 30
         curl -s http://wp-test:8088 | grep -i wordpress
+      shell: /bin/bash -e {0}
     
     # ขั้นตอนการทดสอบ WordPress เบื้องต้น
     - name: Basic WordPress Tests
@@ -70,4 +71,4 @@ jobs:
       run: |
         docker-compose down
         docker-compose up -d wordpress-prod db phpmyadmin
-        
+
