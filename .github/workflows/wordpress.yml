@@ -36,9 +36,9 @@ jobs:
         
    
         
-        # Attempt with wp-test hostname after adding to hosts
-        echo "Testing with wp-test:80:"
-        if curl -i wp-test:80 > test.txt; then
+        # Attempt with localhost hostname after adding to hosts
+        echo "Testing with localhost:80:"
+        if curl -i localhost:80 > test.txt; then
           # Display the content for debugging
           echo "Response content:"
           cat test.txt
@@ -50,7 +50,7 @@ jobs:
             echo "❌ ไม่พบ X-Redirect-By: WordPress header - WordPress อาจมีปัญหา"
           fi
         else
-          echo "❌ Connection to wp-test failed"
+          echo "❌ Connection to localhost failed"
         fi
         
         echo "🏁 การทดสอบเสร็จสิ้น"
